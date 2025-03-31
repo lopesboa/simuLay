@@ -16,9 +16,9 @@ import {
 	FormMessage,
 	FormDescription,
 } from "@/components/ui/form";
+import { FormField } from "./form-field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormField } from "./form-field";
 
 const authFormSchema = (type: FormType) => {
 	return z.object({
@@ -59,7 +59,7 @@ export function AuthForm({ type }: AuthFormProps) {
 			<div className="flex flex-col gap-6 card py-14 px-10">
 				<div className="flex flex-row gap-2 justify-center">
 					<Image src="/logo.svg" alt="logo" height={32} width={38} />
-					<h2 className="text-primary-100">Simulay</h2>
+					<h2 className="text-primary-100">SimuLay</h2>
 				</div>
 
 				<h3>Practice job interviews with Simulay</h3>

@@ -1,19 +1,20 @@
-import React from "react";
 import {
-	FormControl,
-	FormDescription,
+	Controller,
+	type Path,
+	type Control,
+	type FieldValue,
+	type FieldValues,
+} from "react-hook-form";
+import React from "react";
+
+import {
 	FormItem,
 	FormLabel,
+	FormControl,
 	FormMessage,
+	FormDescription,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import {
-	Control,
-	Controller,
-	FieldValue,
-	FieldValues,
-	Path,
-} from "react-hook-form";
 
 type FormFieldProps<T extends FieldValues> = {
 	control: Control<T>;

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import React, { type ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {

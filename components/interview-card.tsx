@@ -1,9 +1,10 @@
 import React from "react";
 import dayjs from "dayjs";
-import Image from "next/image";
-import { getRandomInterviewCover } from "@/lib/utils";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import Image from "next/image";
+
+import { Button } from "./ui/button";
+import { getRandomInterviewCover } from "@/lib/utils";
 import { DisplayTeckIcons } from "./display-teck-icons";
 
 export function InterviewCard({

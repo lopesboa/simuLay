@@ -2,27 +2,23 @@
 
 import { z } from "zod";
 import Link from "next/link";
-import { toast } from "sonner";
 import Image from "next/image";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import React, { type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-	Form,
-	FormItem,
-	FormLabel,
-	FormControl,
-	FormMessage,
-	FormDescription,
-} from "@/components/ui/form";
 import { FormField } from "./form-field";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { signIn, signUp } from "@/lib/auth-client";
+import { SubmitButton } from "./submit-button";
 
 const authFormSchema = (type: FormType) => {
 	return z.object({
-		name: type === "sign-in" ? z.string().min(3) : z.string().optional(),
+		firstName: type === "sign-up" ? z.string().min(3) : z.string().optional(),
+		lastName: type === "sign-up" ? z.string().min(3) : z.string().optional(),
 		email: z.string().email(),
 		password: z.string().min(6),
 	});
@@ -33,20 +29,69 @@ type AuthFormProps = {
 };
 
 export function AuthForm({ type }: AuthFormProps) {
+	const router = useRouter();
 	const formSchema = authFormSchema(type);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			email: "",
 			password: "",
-			name: "",
+			firstName: "",
+			lastName: "",
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
+	console.log("form", type);
+
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		console.log("values", values, type);
 		try {
-			console.log(values);
+			if (type === "sign-up") {
+				console.log(type);
+				const { error, data } = await signUp.email(
+					{
+						name: `${values.firstName} ${values.lastName}`,
+						email: values.email,
+						password: values.password,
+						callbackURL: process.env.NEXT_PUBLIC_CALLBACK_URL,
+					},
+					{
+						onRequest: (ctx) => {},
+						onSuccess: (ctx) => {
+							toast.success(
+								"Account created successfully, please check your email to verify your account",
+							);
+						},
+						onError: (ctx) => {
+							toast.error(ctx.error.message);
+						},
+					},
+				);
+
+				console.log("############### error, data", error, data);
+			} else {
+				const { email, password } = values;
+				const { error, data } = await signIn.email(
+					{
+						email,
+						password,
+						callbackURL: process.env.NEXT_PUBLIC_CALLBACK_URL,
+					},
+					{
+						onRequest: (ctx) => {},
+						onSuccess: (ctx) => {
+							router.push("/");
+						},
+						onError: (ctx) => {
+							toast.error(ctx.error.message);
+						},
+					},
+				);
+
+				console.log("############### error, data", error, data);
+			}
 		} catch (error) {
+			console.log("error", error);
 			//TODO: Remove the eroor from the taost, it should be used only on dev env
 			toast.error(`Something went wrong ${error}`);
 		}
@@ -70,13 +115,22 @@ export function AuthForm({ type }: AuthFormProps) {
 						className="w-full space-y-6 mt-4 form"
 					>
 						{!isSignIn && (
-							<FormField
-								control={form.control}
-								name="name"
-								label="Name"
-								placeholder="John Doe"
-								type="text"
-							/>
+							<>
+								<FormField
+									control={form.control}
+									name="firstName"
+									label="First Name"
+									placeholder="John"
+									type="text"
+								/>
+								<FormField
+									control={form.control}
+									name="lastName"
+									label="Last Name"
+									placeholder="Doe"
+									type="text"
+								/>
+							</>
 						)}
 						<FormField
 							control={form.control}
@@ -94,9 +148,9 @@ export function AuthForm({ type }: AuthFormProps) {
 							type="password"
 						/>
 
-						<Button className="btn" type="submit">
+						<SubmitButton className="btn" type="submit">
 							{isSignIn ? "Sign In" : "Create an Account"}
-						</Button>
+						</SubmitButton>
 					</form>
 				</Form>
 				<p className="text-center">
@@ -105,7 +159,7 @@ export function AuthForm({ type }: AuthFormProps) {
 						href={isSignIn ? "/sign-up" : "/sign-in"}
 						className="font-bold text-user-primary ml-1"
 					>
-						{!isSignIn ? "Sign Up" : "Sign In"}
+						{isSignIn ? "Sign Up" : "Sign In"}
 					</Link>
 				</p>
 			</div>

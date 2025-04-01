@@ -12,7 +12,7 @@ import { FormField } from "./form-field";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import { SubmitButton } from "./submit-button";
 
 const authFormSchema = (type: FormType) => {
@@ -48,7 +48,7 @@ export function AuthForm({ type }: AuthFormProps) {
 		try {
 			if (type === "sign-up") {
 				console.log(type);
-				const { error, data } = await authClient.signUp.email(
+				const { error, data } = await signUp.email(
 					{
 						name: `${values.firstName} ${values.lastName}`,
 						email: values.email,
@@ -71,7 +71,7 @@ export function AuthForm({ type }: AuthFormProps) {
 				console.log("############### error, data", error, data);
 			} else {
 				const { email, password } = values;
-				const { error, data } = await authClient.signIn.email(
+				const { error, data } = await signIn.email(
 					{
 						email,
 						password,

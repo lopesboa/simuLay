@@ -1,9 +1,8 @@
 import {
 	Controller,
-	type Path,
 	type Control,
-	type FieldValue,
 	type FieldValues,
+	type Path,
 } from "react-hook-form";
 import React from "react";
 
@@ -12,17 +11,16 @@ import {
 	FormLabel,
 	FormControl,
 	FormMessage,
-	FormDescription,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-type FormFieldProps<T extends FieldValues> = {
+interface FormFieldProps<T extends FieldValues> {
 	control: Control<T>;
 	name: Path<T>;
 	label: string;
 	placeholder?: string;
-	type: "text" | "password" | "email" | "file";
-};
+	type?: "text" | "email" | "password";
+}
 
 export function FormField<T extends FieldValues>({
 	control,
@@ -33,16 +31,16 @@ export function FormField<T extends FieldValues>({
 }: FormFieldProps<T>) {
 	return (
 		<Controller
-			name={name}
 			control={control}
+			name={name}
 			render={({ field }) => (
 				<FormItem>
 					<FormLabel className="label">{label}</FormLabel>
 					<FormControl>
 						<Input
 							className="input"
-							placeholder={placeholder}
 							type={type}
+							placeholder={placeholder}
 							{...field}
 						/>
 					</FormControl>

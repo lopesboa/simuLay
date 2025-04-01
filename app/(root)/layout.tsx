@@ -1,8 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { type ReactNode } from "react";
+import { validateUserSession } from "@/lib/actions/auth.action";
+import { redirect } from "next/navigation";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+	children,
+}: { children: ReactNode }) {
+	const userSesstion = await validateUserSession();
+
+	if (!userSesstion?.id) {
+		redirect("/sign-in");
+	}
+
 	return (
 		<div className="root-layout">
 			<nav>

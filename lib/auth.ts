@@ -27,7 +27,6 @@ export const auth = betterAuth({
 					validationCode: url,
 				}),
 			});
-			console.log(res, user.email);
 		},
 	},
 	account: {

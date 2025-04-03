@@ -68,6 +68,5 @@ export const ResetPasswordEmail = ({
 };
 
 export function reactResetPasswordEmail(props: ResetPasswordEmailProps) {
-	console.log(props);
 	return <ResetPasswordEmail {...props} />;
 }

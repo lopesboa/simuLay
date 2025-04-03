@@ -41,13 +41,9 @@ export function AuthForm({ type }: AuthFormProps) {
 		},
 	});
 
-	console.log("form", type);
-
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log("values", values, type);
 		try {
 			if (type === "sign-up") {
-				console.log(type);
 				const { error, data } = await signUp.email(
 					{
 						name: `${values.firstName} ${values.lastName}`,
@@ -67,8 +63,6 @@ export function AuthForm({ type }: AuthFormProps) {
 						},
 					},
 				);
-
-				console.log("############### error, data", error, data);
 			} else {
 				const { email, password } = values;
 				const { error, data } = await signIn.email(
@@ -87,11 +81,8 @@ export function AuthForm({ type }: AuthFormProps) {
 						},
 					},
 				);
-
-				console.log("############### error, data", error, data);
 			}
 		} catch (error) {
-			console.log("error", error);
 			//TODO: Remove the eroor from the taost, it should be used only on dev env
 			toast.error(`Something went wrong ${error}`);
 		}

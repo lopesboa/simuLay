@@ -158,7 +158,5 @@ const footer = {
 };
 
 export function reactVerifyEmail(pros: VerifyIdentityEmailProps) {
-	console.log(pros);
-
 	return <VerifyIdentityEmail {...pros} />;
 }

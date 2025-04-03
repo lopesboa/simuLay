@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	uuid,
 	text,
@@ -7,6 +7,7 @@ import {
 	boolean,
 	timestamp,
 	varchar,
+	jsonb,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -63,3 +64,32 @@ export const verification = pgTable("verification", {
 	updatedAt: timestamp({ mode: "string" }).$onUpdateFn(() => sql`now()`),
 	deletedAt: timestamp({ mode: "string" }),
 });
+
+export const interviews = pgTable("interviews", {
+	id: uuid().primaryKey().defaultRandom(),
+	role: varchar({ length: 100 }).notNull(),
+	type: varchar({ length: 50 }).notNull(),
+	level: varchar({ length: 50 }).notNull(),
+	techstack: text().notNull(),
+	questions: jsonb().notNull(),
+	userId: uuid()
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	finalized: boolean().notNull().default(false),
+	amount: integer().notNull(),
+	coverImage: text().notNull(),
+	createdAt: timestamp().notNull().defaultNow(),
+});
+
+export const userRelations = relations(user, ({ many, one }) => ({
+	sessions: many(session),
+	accounts: many(account),
+	interviews: many(interviews),
+}));
+
+export const interviewsRelations = relations(interviews, ({ one }) => ({
+	user: one(user, {
+		fields: [interviews.userId],
+		references: [user.id],
+	}),
+}));

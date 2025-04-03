@@ -51,6 +51,7 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [nextCookies()],
+	trustedOrigins: [process.env.NEXT_PUBLIC_CALLBACK_URL!],
 	advanced: {
 		generateId: false,
 	},

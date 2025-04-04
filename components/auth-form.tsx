@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signIn, signUp } from "@/lib/auth-client";
 import { SubmitButton } from "./submit-button";
+import { useState } from "react";
 
 const authFormSchema = (type: FormType) => {
 	return z.object({
@@ -29,6 +30,8 @@ type AuthFormProps = {
 };
 
 export function AuthForm({ type }: AuthFormProps) {
+	const [loading, setLoading] = useState(false);
+
 	const router = useRouter();
 	const formSchema = authFormSchema(type);
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -43,22 +46,26 @@ export function AuthForm({ type }: AuthFormProps) {
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
+			setLoading(true);
 			if (type === "sign-up") {
 				const { error, data } = await signUp.email(
 					{
 						name: `${values.firstName} ${values.lastName}`,
 						email: values.email,
 						password: values.password,
-						// callbackURL: process.env.NEXT_PUBLIC_CALLBACK_URL,
 					},
 					{
 						onRequest: (ctx) => {},
 						onSuccess: (ctx) => {
+							setLoading(false);
 							toast.success(
 								"Account created successfully, please check your email to verify your account",
 							);
+							//TODO: In the future should be redirected to verify page.
+							router.push("/sign-in");
 						},
 						onError: (ctx) => {
+							setLoading(false);
 							toast.error(ctx.error.message);
 						},
 					},
@@ -71,11 +78,15 @@ export function AuthForm({ type }: AuthFormProps) {
 						password,
 					},
 					{
-						onRequest: (ctx) => {},
+						onRequest: (ctx) => {
+							// setLoading(true);
+						},
 						onSuccess: (ctx) => {
+							setLoading(false);
 							router.push("/");
 						},
 						onError: (ctx) => {
+							setLoading(false);
 							toast.error(ctx.error.message);
 						},
 					},
@@ -88,6 +99,8 @@ export function AuthForm({ type }: AuthFormProps) {
 	}
 
 	const isSignIn = type === "sign-in";
+
+	console.log({ loading });
 
 	return (
 		<div className="card-border lg:min-w-[566px]">
@@ -138,7 +151,7 @@ export function AuthForm({ type }: AuthFormProps) {
 							type="password"
 						/>
 
-						<SubmitButton className="btn" type="submit">
+						<SubmitButton loading={loading} className="btn" type="submit">
 							{isSignIn ? "Sign In" : "Create an Account"}
 						</SubmitButton>
 					</form>

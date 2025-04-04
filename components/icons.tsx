@@ -63,3 +63,8 @@ const AnimatedSpinner = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
 AnimatedSpinner.displayName = "AnimatedSpinner";
 
 export { AnimatedSpinner };
+
+export {
+	EyeOpenIcon,
+	EyeNoneIcon as EyeCloseIcon,
+} from "@radix-ui/react-icons";

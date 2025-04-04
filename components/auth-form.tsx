@@ -49,7 +49,6 @@ export function AuthForm({ type }: AuthFormProps) {
 						name: `${values.firstName} ${values.lastName}`,
 						email: values.email,
 						password: values.password,
-						// callbackURL: process.env.NEXT_PUBLIC_CALLBACK_URL,
 					},
 					{
 						onRequest: (ctx) => {},

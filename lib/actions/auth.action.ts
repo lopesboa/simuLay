@@ -1,9 +1,12 @@
-import { headers } from "next/headers";
-import { and, eq, isNull } from "drizzle-orm";
+"use server";
 
-import { db } from "@/lib/db/db";
+import { z } from "zod";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { parseWithZod } from "@conform-to/zod";
+
 import { auth } from "@/lib/auth";
-import { user } from "../db/schema";
+import { LoginFormSchema } from "@/app/utils/user-validation";
 
 export async function validateUserSession() {
 	try {
@@ -25,4 +28,33 @@ export async function validateUserSession() {
 	} catch (error) {
 		return null;
 	}
+}
+
+export async function loginAction(state, formData) {
+	const submission = await parseWithZod(formData, {
+		schema: (intent) =>
+			LoginFormSchema.transform(async (data, ctx) => {
+				if (intent !== null) return { ...data, session: null };
+				try {
+					await auth.api.signInEmail({
+						body: {
+							email: data.email,
+							password: data.password,
+						},
+					});
+				} catch (error) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: error?.message,
+					});
+				}
+			}),
+		async: true,
+	});
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	redirect("/");
 }

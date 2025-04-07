@@ -3,15 +3,16 @@
 import { forwardRef } from "react";
 import { LoadingButton } from "@/components/loading-button";
 import type { ButtonProps } from "@/components/ui/button";
+import { useFormStatus } from "react-dom";
 
 const SubmitButton = forwardRef<HTMLButtonElement, ButtonProps>(
 	({ className, children, ...props }, ref) => {
-		// const { pending } = useFormStatus();
+		const { pending } = useFormStatus();
 		return (
 			<LoadingButton
 				ref={ref}
 				{...props}
-				// loading={pending}
+				loading={pending}
 				className={className}
 			>
 				{children}

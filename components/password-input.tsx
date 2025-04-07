@@ -9,6 +9,7 @@ import { Input, type InputProps } from "@/components/ui/input";
 
 type PasswordInputProps = {
 	onClick?: () => void;
+	showPassword?: boolean;
 	labelProps: React.LabelHTMLAttributes<HTMLLabelElement>;
 	inputProps: React.InputHTMLAttributes<HTMLInputElement>;
 	errors?: ListOfErrors;
@@ -16,29 +17,22 @@ type PasswordInputProps = {
 };
 
 const PasswordInputComponent = forwardRef<HTMLInputElement, PasswordInputProps>(
-	({ labelProps, inputProps, errors, className }, ref) => {
-		const [showPassword, setShowPassword] = useState(false);
+	(
+		{ labelProps, inputProps, errors, className, onClick, showPassword },
+		ref,
+	) => {
 		const fallbackId = useId();
 		const id = inputProps.id ?? fallbackId;
 		const errorId = errors?.length ? `${id}-error` : undefined;
 
-		const handleOnClick = () => {
-			setShowPassword((prev) => !prev);
-		};
-
-		const type =
-			inputProps.type === "password" && !showPassword ? "password" : "text";
-
-		console.log("rendering password input", type);
 		return (
 			<div className="relative">
 				<Label htmlFor={id} className="mb-3" {...labelProps} />
 				<Input
 					id={id}
 					aria-invalid={errorId ? true : undefined}
-					aria-label={type}
+					aria-label={labelProps?.["aria-label"]}
 					aria-describedby={errorId}
-					type={!showPassword ? "text" : "password"}
 					className={cn("pr-10 input", errorId ? "border-red-700" : undefined)}
 					ref={ref}
 					{...inputProps}
@@ -47,8 +41,8 @@ const PasswordInputComponent = forwardRef<HTMLInputElement, PasswordInputProps>(
 					type="button"
 					variant="ghost"
 					size="sm"
-					className="absolute right-0 top-[13px] h-full px-3"
-					onClick={handleOnClick}
+					className="absolute right-0 top-[13px] h-full px-3 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+					onClick={onClick}
 					disabled={inputProps.disabled}
 				>
 					{showPassword ? (

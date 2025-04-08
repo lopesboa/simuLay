@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { parseWithZod } from "@conform-to/zod";
 
 import { auth } from "@/lib/auth";
-import { LoginFormSchema } from "@/app/utils/user-validation";
+import { LoginFormSchema, SignUpFormSchema } from "@/app/utils/user-validation";
 
 export async function validateUserSession() {
 	try {
@@ -30,7 +30,7 @@ export async function validateUserSession() {
 	}
 }
 
-export async function loginAction(state, formData) {
+export async function signInAction(state, formData) {
 	const submission = await parseWithZod(formData, {
 		schema: (intent) =>
 			LoginFormSchema.transform(async (data, ctx) => {
@@ -57,4 +57,34 @@ export async function loginAction(state, formData) {
 	}
 
 	redirect("/");
+}
+
+export async function signUpAction(state, formData) {
+	const submission = await parseWithZod(formData, {
+		schema: (intent) =>
+			SignUpFormSchema.transform(async (data, ctx) => {
+				if (intent !== null) return { ...data, session: null };
+				try {
+					await auth.api.signUpEmail({
+						body: {
+							email: data.email,
+							password: data.password,
+							name: `${data.firstName} ${data.lastName}`,
+						},
+					});
+				} catch (error) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: error?.message,
+					});
+				}
+			}),
+		async: true,
+	});
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	redirect("/verify-email");
 }

@@ -1,6 +1,13 @@
-import { AuthForm } from "@/components/auth-form";
-import React from "react";
+"use client";
+
+import React, { Suspense } from "react";
+
+import { SignUpForm } from "@/components/sign-up-form";
 
 export default function SignUpPage() {
-	return <AuthForm type="sign-up" />;
+	return (
+		<Suspense>
+			<SignUpForm />
+		</Suspense>
+	);
 }

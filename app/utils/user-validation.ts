@@ -43,7 +43,7 @@ export const LoginFormSchema = z.object({
 	remember: z.boolean().optional(),
 });
 
-export const SignupFormSchema = z
+export const SignUpFormSchema = z
 	.object({
 		firstName: NameSchema,
 		lastName: NameSchema,

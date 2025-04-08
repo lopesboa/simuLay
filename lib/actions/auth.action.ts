@@ -70,6 +70,8 @@ export async function signUpAction(state, formData) {
 							email: data.email,
 							password: data.password,
 							name: `${data.firstName} ${data.lastName}`,
+							firstName: data.firstName,
+							lastName: data.lastName,
 						},
 					});
 				} catch (error) {

@@ -29,6 +29,12 @@ export const auth = betterAuth({
 			});
 		},
 	},
+	user: {
+		additionalFields: {
+			firstName: { type: "string" },
+			lastName: { type: "string" },
+		},
+	},
 	account: {
 		accountLinking: {
 			trustedProviders: ["google", "apple"],
@@ -51,7 +57,6 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [nextCookies()],
-	trustedOrigins: [process.env.NEXT_PUBLIC_CALLBACK_URL!],
 	advanced: {
 		generateId: false,
 	},

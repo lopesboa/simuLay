@@ -10,13 +10,13 @@ import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 
 import { Field } from "@/components/forms";
-import { loginAction } from "@/lib/actions/auth.action";
+import { signInAction } from "@/lib/actions/auth.action";
 import { SubmitButton } from "@/components/submit-button";
 import { PasswordInput } from "@/components/password-input";
 import { LoginFormSchema } from "@/app/utils/user-validation";
 
 function LoginWithSearchParams() {
-	const [lastResult, action] = useActionState(loginAction, undefined);
+	const [lastResult, action] = useActionState(signInAction, undefined);
 	const searchParams = useSearchParams();
 	const redirectTo = searchParams.get("redirectTo");
 

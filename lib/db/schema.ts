@@ -70,8 +70,8 @@ export const interviews = pgTable("interviews", {
 	role: varchar({ length: 100 }).notNull(),
 	type: varchar({ length: 50 }).notNull(),
 	level: varchar({ length: 50 }).notNull(),
-	techstack: text().notNull(),
-	questions: jsonb().notNull(),
+	techstack: text().array().notNull(),
+	questions: text().array().notNull(),
 	userId: uuid()
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),

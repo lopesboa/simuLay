@@ -1,0 +1,1 @@
+ALTER TABLE "interviews" ALTER COLUMN "questions" SET DATA TYPE text[];

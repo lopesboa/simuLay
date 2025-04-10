@@ -2,6 +2,7 @@ import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { getRandomInterviewCover } from "@/lib/utils";
 import { saveInterview } from "@/app/utils/interview.server";
+import { parseAmount } from "@/app/utils/parse-amount";
 export async function GET(request: Request) {
 	const apiKey = request.headers.get("x-api-key");
 	if (!apiKey || apiKey !== process.env.X_API_KEY) {
@@ -38,6 +39,8 @@ export async function POST(request: Request) {
     `,
 		});
 
+		const newAmount = parseAmount(amount);
+
 		const interview = {
 			role,
 			type,
@@ -46,7 +49,7 @@ export async function POST(request: Request) {
 			questions: JSON.parse(questions),
 			userId: userid,
 			finalized: true,
-			amount,
+			amount: newAmount,
 			coverImage: getRandomInterviewCover(),
 		};
 

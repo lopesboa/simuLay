@@ -12,6 +12,7 @@ import { interviewer } from "@/constants";
 import { CallStatusButton } from "./call-status";
 import type { SavedMessage, CallStatus } from "./types";
 import { TranscriptMessage } from "./transcript-message";
+import { createFeedback } from "@/app/utils/feedback.server";
 
 export function Agent({
 	userName,
@@ -110,14 +111,18 @@ export function Agent({
 	}, []);
 
 	const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-		const { success, id } = { success: true, id: "feedback-id" };
+		const { success, feedbackId } = await createFeedback({
+			interviewId: interviewId!,
+			userId: userId!,
+			transcript: messages,
+		});
 
-		if (success && id) {
+		if (success && feedbackId) {
 			router.push(`/interview/${interviewId}/feedback`);
 		} else {
 			sentry.captureException("Error generating feedback", {
 				user: { id: userId },
-				extra: { messages, id, interviewId },
+				extra: { messages, interviewId },
 			});
 			router.push("/");
 		}

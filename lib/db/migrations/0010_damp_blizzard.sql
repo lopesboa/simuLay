@@ -1,0 +1,1 @@
+ALTER TABLE "feedbacks" ALTER COLUMN "total_score" SET DATA TYPE integer;

@@ -30,6 +30,14 @@ export async function validateUserSession() {
 	}
 }
 
+export async function getCurrentUser() {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	return session?.user;
+}
+
 export async function signInAction(state, formData) {
 	const submission = await parseWithZod(formData, {
 		schema: (intent) =>

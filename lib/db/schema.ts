@@ -1,14 +1,14 @@
-import { relations, sql } from "drizzle-orm";
 import {
 	uuid,
 	text,
+	jsonb,
+	varchar,
 	integer,
 	pgTable,
 	boolean,
 	timestamp,
-	varchar,
-	jsonb,
 } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
 
 export const user = pgTable("user", {
 	id: uuid().primaryKey().defaultRandom(),
@@ -81,15 +81,60 @@ export const interviews = pgTable("interviews", {
 	createdAt: timestamp().notNull().defaultNow(),
 });
 
+//TODO: In future it may be better approach to have a normalized table for categories.
+//instead of just using jsonb.
+
+export const feedbacks = pgTable("feedbacks", {
+	id: uuid().primaryKey().defaultRandom(),
+	totalScore: integer().notNull(),
+	categoryScores: jsonb().notNull().$type<
+		Array<{
+			name:
+				| "Communication Skills"
+				| "Technical Knowledge"
+				| "Problem Solving"
+				| "Cultural Fit"
+				| "Confidence and Clarity";
+			score: number;
+			comment: string;
+		}>
+	>(),
+	strengths: text().array().notNull(),
+	areasForImprovement: text().array().notNull(),
+	finalAssessment: text().notNull(),
+	interviewId: uuid().references(() => interviews.id, { onDelete: "cascade" }),
+	userId: uuid().notNull(),
+	createdAt: timestamp().defaultNow(),
+	updatedAt: timestamp()
+		.defaultNow()
+		.$onUpdate(() => new Date()),
+});
+
 export const userRelations = relations(user, ({ many, one }) => ({
 	sessions: many(session),
 	accounts: many(account),
 	interviews: many(interviews),
+	feedbacks: many(feedbacks),
 }));
 
 export const interviewsRelations = relations(interviews, ({ one }) => ({
 	user: one(user, {
 		fields: [interviews.userId],
 		references: [user.id],
+	}),
+	feedback: one(feedbacks, {
+		fields: [interviews.id],
+		references: [feedbacks.interviewId],
+	}),
+}));
+
+export const feedbackRelations = relations(feedbacks, ({ one }) => ({
+	user: one(user, {
+		fields: [feedbacks.userId],
+		references: [user.id],
+	}),
+	interview: one(interviews, {
+		fields: [feedbacks.interviewId],
+		references: [interviews.id],
 	}),
 }));

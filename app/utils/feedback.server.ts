@@ -1,10 +1,11 @@
+"use server";
 import { generateObject } from "ai";
-import sentry from "@sentry/nextjs";
 import { google } from "@ai-sdk/google";
+import * as sentry from "@sentry/nextjs";
 
 import { db } from "@/lib/db/db";
-import { feedbackSchema } from "@/constants";
 import { feedbacks } from "@/lib/db/schema";
+import { feedbackSchema } from "@/constants";
 
 async function generateFeedback(
 	formattedTranscript: string,

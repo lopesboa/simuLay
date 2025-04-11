@@ -44,12 +44,14 @@ export async function signInAction(state, formData) {
 			LoginFormSchema.transform(async (data, ctx) => {
 				if (intent !== null) return { ...data, session: null };
 				try {
-					await auth.api.signInEmail({
+					const result = await auth.api.signInEmail({
 						body: {
 							email: data.email,
 							password: data.password,
 						},
 					});
+
+					return { session: result.user };
 				} catch (error) {
 					ctx.addIssue({
 						code: z.ZodIssueCode.custom,
@@ -73,7 +75,7 @@ export async function signUpAction(state, formData) {
 			SignUpFormSchema.transform(async (data, ctx) => {
 				if (intent !== null) return { ...data, session: null };
 				try {
-					await auth.api.signUpEmail({
+					const result = await auth.api.signUpEmail({
 						body: {
 							email: data.email,
 							password: data.password,
@@ -82,6 +84,8 @@ export async function signUpAction(state, formData) {
 							lastName: data.lastName,
 						},
 					});
+
+					return { session: result.user };
 				} catch (error) {
 					ctx.addIssue({
 						code: z.ZodIssueCode.custom,

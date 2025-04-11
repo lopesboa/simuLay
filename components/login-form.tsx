@@ -6,11 +6,12 @@ import { useSearchParams } from "next/navigation";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 
-import { Field } from "./forms";
+import { ErrorList, Field } from "./forms";
 import { SubmitButton } from "./submit-button";
 import { PasswordInput } from "./password-input";
 import { signInAction } from "@/lib/actions/auth.action";
 import { LoginFormSchema } from "@/app/utils/user-validation";
+import posthog from "posthog-js";
 
 export function LogInForm() {
 	const [lastResult, action] = useActionState(signInAction, undefined);
@@ -38,6 +39,12 @@ export function LogInForm() {
 	if (form.errors?.length) {
 		toast.error(form.errors[0]);
 	}
+
+	const sendSinInEvent = () => {
+		posthog.capture("Sign in buttom: clicked", {
+			property: fields.email.value,
+		});
+	};
 
 	return (
 		<div className="card-border lg:min-w-[566px]">
@@ -79,9 +86,17 @@ export function LogInForm() {
 							errors={fields.password.errors}
 						/>
 
-						<SubmitButton className="btn" type="submit">
-							{"Sign In"}
-						</SubmitButton>
+						<div>
+							<ErrorList errors={form.errors} id={form.errorId} />
+							<SubmitButton
+								className="btn"
+								type="submit"
+								aria-label="submit-btn"
+								onClick={sendSinInEvent}
+							>
+								{"Sign In"}
+							</SubmitButton>
+						</div>
 					</form>
 				</div>
 				<p className="text-center">

@@ -3,14 +3,6 @@ import { google } from "@ai-sdk/google";
 import { getRandomInterviewCover } from "@/lib/utils";
 import { saveInterview } from "@/app/utils/interview.server";
 import { parseAmount } from "@/app/utils/parse-amount";
-export async function GET(request: Request) {
-	const apiKey = request.headers.get("x-api-key");
-	if (!apiKey || apiKey !== process.env.X_API_KEY) {
-		return new Response("Unauthorized", { status: 401 });
-	}
-
-	return Response.json({ success: true, data: "Hello World" }, { status: 200 });
-}
 
 export async function POST(request: Request) {
 	//TODO: Add option to that let user upload the cover image

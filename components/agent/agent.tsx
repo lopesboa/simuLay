@@ -13,6 +13,7 @@ import { CallStatusButton } from "./call-status";
 import type { SavedMessage, CallStatus } from "./types";
 import { TranscriptMessage } from "./transcript-message";
 import { createFeedback } from "@/app/utils/feedback.server";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function Agent({
 	userName,
@@ -128,6 +129,11 @@ export function Agent({
 		}
 	};
 
+	const avatarFallback = userName
+		.split(" ")
+		.map((name) => name[0])
+		.join("");
+
 	useEffect(() => {
 		if (callStatus === CALL_STATUS.FINISHED) {
 			if (type === "generate") {
@@ -156,13 +162,13 @@ export function Agent({
 				</div>
 				<div className="card-border">
 					<div className="card-content">
-						<Image
-							src="/user-avatar.png"
-							alt="user avatar"
-							width={540}
-							height={540}
-							className="rounded-full object-cover size-[120px]"
-						/>
+						{/* TODO: add user avatar when available */}
+						<Avatar className="rounded-full object-cover size-[120px]">
+							<AvatarImage src={""} alt={""} />
+							<AvatarFallback className="rounded-lg">
+								{avatarFallback}
+							</AvatarFallback>
+						</Avatar>
 						<h3>{userName}</h3>
 					</div>
 				</div>

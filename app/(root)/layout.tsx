@@ -1,10 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-import React, { type ReactNode } from "react";
-import { validateUserSession } from "@/lib/actions/auth.action";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { useUserStore, User } from "@/stores/user.store";
+import React, { type ReactNode } from "react";
+
 import ClientRootLayout from "../client-layout";
+import { SiteHeader } from "./_components/site-header";
+import { AppSidebar } from "./_components/app-sidebar";
+import { useUserStore, User } from "@/stores/user.store";
+import { validateUserSession } from "@/lib/actions/auth.action";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+
+export const metadata: Metadata = {
+	title: "Interviews | SimuLay",
+	description: "An AI-powered web platform for preparing for mock interviews",
+};
 
 export default async function RootLayout({
 	children,
@@ -17,15 +27,13 @@ export default async function RootLayout({
 
 	return (
 		<ClientRootLayout user={userSesstion}>
-			<div className="root-layout">
-				<nav>
-					<Link href="/" className="flex items-center gap-2">
-						<Image src="/logo.svg" alt="logo" width={32} height={38} />
-						<h2 className="text-primary-100">SimuLay</h2>
-					</Link>
-				</nav>
-				{children}
-			</div>
+			<SidebarProvider>
+				<AppSidebar variant="inset" />
+				<SidebarInset>
+					<SiteHeader />
+					<div className="root-layout">{children}</div>
+				</SidebarInset>
+			</SidebarProvider>
 		</ClientRootLayout>
 	);
 }

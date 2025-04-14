@@ -26,6 +26,19 @@ const nextConfig: NextConfig = {
 		];
 	},
 	skipTrailingSlashRedirect: true,
+	async headers() {
+		return [
+			{
+				source: "/(.*)",
+				headers: [
+					{
+						key: "X-Robots-Tag",
+						value: "index, follow",
+					},
+				],
+			},
+		];
+	},
 };
 
 export default withSentryConfig(nextConfig, {
@@ -59,4 +72,3 @@ export default withSentryConfig(nextConfig, {
 	// https://vercel.com/docs/cron-jobs
 	automaticVercelMonitors: true,
 });
-

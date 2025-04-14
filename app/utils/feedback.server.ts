@@ -1,5 +1,7 @@
 "use server";
+
 import { generateObject } from "ai";
+import { and, eq } from "drizzle-orm";
 import { google } from "@ai-sdk/google";
 import * as sentry from "@sentry/nextjs";
 
@@ -97,9 +99,38 @@ export async function createFeedback({
 	} catch (error) {
 		sentry.captureException(error, {
 			tags: { function: "createFeedback" },
+			extra: { interviewId, userId, transcript },
 		});
 		return {
 			success: false,
 		};
+	}
+}
+
+export async function getFeedbackByInterviewId({
+	interviewId,
+	userId,
+}: GetFeedbackByInterviewIdParams) {
+	try {
+		return db.query.feedbacks.findFirst({
+			where: and(
+				eq(feedbacks.userId, userId),
+				eq(feedbacks.interviewId, interviewId),
+			),
+			columns: {
+				id: true,
+				totalScore: true,
+				categoryScores: true,
+				strengths: true,
+				areasForImprovement: true,
+				finalAssessment: true,
+				createdAt: true,
+			},
+		});
+	} catch (error) {
+		sentry.captureException(error, {
+			tags: { function: "getFeedbackByInterviewId" },
+			extra: { interviewId, userId },
+		});
 	}
 }

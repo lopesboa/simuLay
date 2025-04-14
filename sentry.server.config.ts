@@ -1,11 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
 
-if (process.env.NODE_ENV === "production") {
-	Sentry.init({
-		dsn: process.env.SENTRY_DSN,
+Sentry.init({
+	dsn: process.env.SENTRY_DSN,
+	enabled: process.env.NODE_ENV === "production",
 
-		tracesSampleRate: 1,
+	tracesSampleRate: 1,
 
-		debug: false,
-	});
-}
+	debug: false,
+});

@@ -16,7 +16,7 @@ export default async function FeedbackPage({ params }: RouteParams) {
 	const interview = await getInterviewById(id);
 
 	if (!interview) {
-		redirect("/");
+		redirect("/overview");
 	}
 
 	const feedback = await getFeedbackByInterviewId({
@@ -79,8 +79,8 @@ export default async function FeedbackPage({ params }: RouteParams) {
 			<div className="flex flex-col gap-3">
 				<h3>Strengths</h3>
 				<ul>
-					{feedback?.strengths?.map((strength, index) => (
-						<li key={index}>{strength}</li>
+					{feedback?.strengths?.map((strength) => (
+						<li key={strength}>{strength}</li>
 					))}
 				</ul>
 			</div>
@@ -88,15 +88,15 @@ export default async function FeedbackPage({ params }: RouteParams) {
 			<div className="flex flex-col gap-3">
 				<h3>Areas for Improvement</h3>
 				<ul>
-					{feedback?.areasForImprovement?.map((area, index) => (
-						<li key={index}>{area}</li>
+					{feedback?.areasForImprovement?.map((area) => (
+						<li key={area}>{area}</li>
 					))}
 				</ul>
 			</div>
 
 			<div className="buttons">
 				<Button className="btn-secondary flex-1">
-					<Link href="/" className="flex w-full justify-center">
+					<Link href="/overview" className="flex w-full justify-center">
 						<p className="text-sm font-semibold text-primary-200 text-center">
 							Back to dashboard
 						</p>

@@ -66,7 +66,7 @@ export async function signInAction(state, formData) {
 		return submission.reply();
 	}
 
-	redirect("/");
+	redirect("/overview");
 }
 
 export async function signUpAction(state, formData) {

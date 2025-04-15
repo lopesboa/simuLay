@@ -20,7 +20,7 @@ export default async function AuthLayout({
 	const userSesstion = await validateUserSession();
 
 	if (userSesstion?.id) {
-		redirect("/");
+		redirect("/overview");
 	}
 	return <div className="auth-layout">{children}</div>;
 }

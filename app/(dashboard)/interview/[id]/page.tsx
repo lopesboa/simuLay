@@ -14,7 +14,7 @@ export default async function page({ params }: RouteParams) {
 	const user = await getCurrentUser();
 
 	if (!interview) {
-		redirect("/");
+		redirect("/overview");
 	}
 
 	return (

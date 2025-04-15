@@ -5,12 +5,12 @@ import Image from "next/image";
 import {
 	getInterviewsByUserId,
 	getLatestInterviews,
-} from "../utils/interview.server";
+} from "../../utils/interview.server";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 import { InterviewCard } from "@/components/interview-card";
 
-export default async function RootPage() {
+export default async function DashboardPage() {
 	const user = await getCurrentUser();
 
 	const [userInterviews, latestInterviews] = await Promise.all([

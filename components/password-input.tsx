@@ -37,23 +37,23 @@ const PasswordInputComponent = forwardRef<HTMLInputElement, PasswordInputProps>(
 					ref={ref}
 					{...inputProps}
 				/>
-				<Button
-					type="button"
-					variant="ghost"
-					size="sm"
-					className="absolute right-0 top-[13px] h-full px-3 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-					onClick={onClick}
-					disabled={inputProps.disabled}
-				>
-					{showPassword ? (
-						<EyeCloseIcon className="h-4 w-4" aria-hidden="true" />
-					) : (
-						<EyeOpenIcon className="h-4 w-4" aria-hidden="true" />
-					)}
-					<span className="sr-only">
-						{showPassword ? "Hide password" : "Show password"}
-					</span>
-				</Button>
+				{/* <Button */}
+				{/* 	type="button" */}
+				{/* 	variant="ghost" */}
+				{/* 	size="sm" */}
+				{/* 	className="absolute right-0 top-[13px] h-full px-3 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50" */}
+				{/* 	onClick={onClick} */}
+				{/* 	disabled={inputProps.disabled} */}
+				{/* > */}
+				{/* 	{showPassword ? ( */}
+				{/* 		<EyeCloseIcon className="h-4 w-4" aria-hidden="true" /> */}
+				{/* 	) : ( */}
+				{/* 		<EyeOpenIcon className="h-4 w-4" aria-hidden="true" /> */}
+				{/* 	)} */}
+				{/* 	<span className="sr-only"> */}
+				{/* 		{showPassword ? "Hide password" : "Show password"} */}
+				{/* 	</span> */}
+				{/* </Button> */}
 				{errorId ? (
 					<div className="min-h-[32px] px-4 pb-3 pt-1">
 						<ErrorList id={errorId} errors={errors} />

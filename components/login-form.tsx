@@ -21,12 +21,15 @@ export function LogInForm() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const [form, fields] = useForm({
-		id: "login-form",
+		id: "singup-form",
 		constraint: getZodConstraint(LoginFormSchema),
 		defaultValue: { redirectTo },
 		lastResult,
+
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: LoginFormSchema });
+			const result = parseWithZod(formData, { schema: LoginFormSchema });
+
+			return result;
 		},
 
 		shouldValidate: "onBlur",
@@ -39,12 +42,6 @@ export function LogInForm() {
 	if (form.errors?.length) {
 		toast.error(form.errors[0]);
 	}
-
-	const sendSinInEvent = () => {
-		posthog.capture("Sign in buttom: clicked", {
-			property: fields.email.value,
-		});
-	};
 
 	return (
 		<div className="card-border lg:min-w-[566px]">
@@ -63,11 +60,15 @@ export function LogInForm() {
 						{...getFormProps(form)}
 					>
 						<Field
-							labelProps={{ children: "Email" }}
+							labelProps={{
+								htmlFor: fields.email.id,
+								children: "Email",
+							}}
 							inputProps={{
-								...getInputProps(fields.email, {
-									type: "email",
-								}),
+								...getInputProps(fields.email, { type: "email" }),
+								autoFocus: true,
+								autoComplete: "email",
+
 								placeholder: "email@example.com",
 							}}
 							errors={fields.email.errors}
@@ -92,7 +93,6 @@ export function LogInForm() {
 								className="btn"
 								type="submit"
 								aria-label="submit-btn"
-								onClick={sendSinInEvent}
 							>
 								{"Sign In"}
 							</SubmitButton>

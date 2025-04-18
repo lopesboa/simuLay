@@ -49,7 +49,6 @@ export function Field({
 		<div className={className}>
 			<Label htmlFor={id} className="mb-3" {...labelProps} />
 			<Input
-				key={id}
 				id={id}
 				aria-invalid={errorId ? true : undefined}
 				aria-describedby={errorId}
@@ -64,36 +63,3 @@ export function Field({
 		</div>
 	);
 }
-
-// export function PasswordField({
-// 	labelProps,
-// 	inputProps,
-// 	errors,
-// 	className,
-// }: {
-// 	labelProps: React.LabelHTMLAttributes<HTMLLabelElement>;
-// 	inputProps: React.InputHTMLAttributes<HTMLInputElement>;
-// 	errors?: ListOfErrors;
-// 	className?: string;
-// }) {
-// 	const fallbackId = useId();
-// 	const id = inputProps.id ?? fallbackId;
-// 	const errorId = errors?.length ? `${id}-error` : undefined;
-// 	return (
-// 		<div className={className}>
-// 			<Label htmlFor={id} className="mb-3" {...labelProps} />
-// 			<PasswordInput
-// 				id={id}
-// 				aria-invalid={errorId ? true : undefined}
-// 				aria-describedby={errorId}
-// 				className={cn("input", errorId ? "border-red-700" : undefined)}
-// 				{...inputProps}
-// 			/>
-// 			{errorId ? (
-// 				<div className="min-h-[32px] px-4 pb-3 pt-1">
-// 					<ErrorList id={errorId} errors={errors} />
-// 				</div>
-// 			) : null}
-// 		</div>
-// 	);
-// }
